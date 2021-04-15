@@ -1,7 +1,8 @@
 from sklearn.datasets import load_iris
 from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction import DictVectorizer
-from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
+import jieba
 
 
 def demo_load_iris():
@@ -65,6 +66,7 @@ def dict_demo():
 
     return None
 
+
 def count_demo():
 
     data = ["life is short", "life is too long"]
@@ -77,6 +79,20 @@ def count_demo():
     print("data new toarray: \n", data_new.toarray())
     print("feature names: \n", transfer.get_feature_names())
     return None
+# data new:
+#    (0, 1)       1
+#   (0, 0)        1
+#   (0, 3)        1
+#   (1, 1)        1
+#   (1, 0)        1
+#   (1, 4)        1
+#   (1, 2)        1
+# data new toarray:
+#  [[1 1 0 1 0]
+#  [1 1 1 0 1]]
+# feature names:
+#  ['is', 'life', 'long', 'short', 'too']
+
 
 def count_chinese_demo():
 
@@ -90,10 +106,19 @@ def count_chinese_demo():
     print("data new toarray: \n", data_new.toarray())
     print("feature names: \n", transfer.get_feature_names())
     return None
+# data new:
+#    (0, 1)       1
+#   (1, 0)        1
+# data new toarray:
+#  [[0 1]
+#  [1 0]]
+# feature names:
+#  ['天安门上太阳升', '我爱北京天安门']
+
 
 def count_chinese_split_demo():
 
-    data = ["我爱 北京 天安门", "天安门 上 太阳升"]
+    data = ["我 爱 北京 天安门", "天安门 上 太阳 升"]
 
     transfer = CountVectorizer()
 
@@ -103,6 +128,80 @@ def count_chinese_split_demo():
     print("data new toarray: \n", data_new.toarray())
     print("feature names: \n", transfer.get_feature_names())
     return None
+# data new:
+#    (0, 0)       1
+#   (0, 1)        1
+#   (1, 1)        1
+#   (1, 2)        1
+# data new toarray:
+#  [[1 1 0]
+#  [0 1 1]]
+# feature names:
+#  ['北京', '天安门', '太阳']
+
+
+def cut_word(text):
+    """
+    split chinese words
+    :param text:
+    :return:
+    """
+    result = " ".join(list(jieba.cut(text)))
+    # print(result)
+    return result
+
+
+def count_chinese_split_demo2():
+    data = ["新闻——让每一次阅读都有价值！",
+            "倾情打造专注新闻内容的新闻客户端，让更加优质、专业的新闻内容能够通过个性化方式分发每一位用户，满足用户获取关心的、感兴趣的新闻的需求。"]
+
+    data_new = []
+    for sent in data:
+        data_new.append(cut_word(sent))
+    # print(data_new)
+    transfer = CountVectorizer(stop_words=["一个", "一位", "一条", "一次", "一篇"])
+
+    data_final = transfer.fit_transform(data_new)
+
+    print("data new: \n", data_final)
+    print("data new toarray: \n", data_final.toarray())
+    print("feature names: \n", transfer.get_feature_names())
+
+    return None
+# data new:
+#    (0, 12)      1
+#   (0, 20)       1
+#   (0, 3)        1
+#   (1, 12)       4
+#   (1, 5)        1
+#   (1, 11)       1
+#   (1, 1)        1
+#   (1, 7)        2
+#   (1, 9)        1
+#   (1, 14)       1
+#   (1, 4)        1
+#   (1, 0)        1
+#   (1, 17)       1
+#   (1, 19)       1
+#   (1, 2)        1
+#   (1, 13)       1
+#   (1, 8)        1
+#   (1, 16)       1
+#   (1, 15)       1
+#   (1, 18)       1
+#   (1, 6)        1
+#   (1, 10)       1
+#   (1, 21)       1
+# data new toarray:
+#  [[0 0 0 1 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 1 0]
+#  [1 1 1 0 1 1 1 2 1 1 1 1 4 1 1 1 1 1 1 1 0 1]]
+# feature names:
+#  ['专业', '专注', '个性化', '价值', '优质', '倾情', '关心', '内容', '分发', '客户端', '感兴趣', '打造', '新闻', '方式', '更加', '满足用户', '用户', '能够', '获取', '通过', '阅读', '需求']
+
 
 if __name__ == "__main__":
-    count_chinese_split_demo()
+    # cut_world("我爱北京天安门")
+    count_demo()
+    # count_chinese_demo()
+    # count_chinese_split_demo()
+    # count_chinese_split_demo2()

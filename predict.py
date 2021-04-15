@@ -1,4 +1,44 @@
 from sklearn.feature_extraction import DictVectorizer
+from collections import OrderedDict
+import matplotlib.pyplot as plt
+import pandas as pd
+from sklearn.linear_model import LinearRegression
+
+
+def linear_regression():
+    # X = [1, 2, 3]
+    # Y = [1618290459000, 1618290458000, 1618290457000]
+    data = pd.read_csv("./predict.csv")
+    x = data['No']
+    y = data['RequestTime']
+
+    x = x.values.reshape(-1, 1)
+    y = y.values.reshape(-1, 1)
+
+    model = LinearRegression()
+    model.fit(x, y)
+
+    # 获取预测值
+    predict_y = model.predict(x)
+
+    # 构造返回字典
+    predictions = {}
+    predictions['intercept'] = model.intercept_  # 截距值
+    predictions['coefficient'] = model.coef_    # 回归系数（斜率值）
+    predictions['predict_value'] = predict_y
+
+    # 绘出图像
+    # 绘出已知数据散点图
+    plt.scatter(x, y, color='blue')
+    # 绘出预测直线
+    plt.plot(x, predict_y, color='red', linewidth=2)
+
+    plt.title('predict the request time')
+    plt.xlabel('times')
+    plt.ylabel('request time')
+    plt.show()
+
+    return None
 
 
 def predict_next_request_time():
@@ -48,4 +88,5 @@ def predict_next_request_time():
 
 
 if __name__ == "__main__":
-    predict_next_request_time()
+    # predict_next_request_time()
+    linear_regression()
