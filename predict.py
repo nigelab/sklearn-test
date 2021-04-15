@@ -6,8 +6,8 @@ from sklearn.linear_model import LinearRegression
 
 
 def linear_regression():
-    # X = [1, 2, 3]
-    # Y = [1618290459000, 1618290458000, 1618290457000]
+    # x = [1, 2, 3]
+    # y = [1618290457000, 1618290758000, 1618291060000]
     data = pd.read_csv("./predict.csv")
     x = data['No']
     y = data['RequestTime']
@@ -83,6 +83,28 @@ def predict_next_request_time():
     print("feature names: \n", transfer.get_feature_names())
 # feature names:
 #  ['city=上海', 'city=北京', 'city=深圳', 'temperature']
+
+    return None
+
+
+def predict0():
+    data = [{"request_url": "http://abc.com/siteId=1", "response_time": 7, "request_time": 16571234000, "request_header_tenant_id": "amazon"},
+            {"request_url": "http://abc.com/siteId=2", "response_time": 7,
+                "request_time": 16571234000, "request_header_tenant_id": "amazon"},
+            {"request_url": "http://abc.com/siteId=3", "response_time": 7,
+                "request_time": 16571234000, "request_header_tenant_id": "amazon"},
+            {"request_url": "http://abc.com/siteId=1", "response_time": 7,
+            "request_time": 16571564000, "request_header_tenant_id": "amazon"},
+            {"request_url": "http://abc.com/siteId=2", "response_time": 7,
+            "request_time": 16571564000, "request_header_tenant_id": "amazon"},
+            ]
+    return None
+
+
+def predict1():
+
+    x = [1, 2, 3]
+    y = [1618290457000, 1618290758000, 1618291060000]
 
     return None
 

@@ -18,4 +18,5 @@ def demo_load_iris():
 
 
 if __name__ == "__main__":
+    # code 1: sklearn datasets usage
     demo_load_iris()
